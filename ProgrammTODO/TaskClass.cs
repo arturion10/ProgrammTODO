@@ -12,11 +12,12 @@ namespace ProgrammTODO
         public int Id { get; set; }
         public string Name { get; set; }
         [MaxLength(200)]
+        public string Category { get; set; }
         public string Description { get; set; }
         public bool IsCompleted { get; set; } = false;
-        public DateTime StartDateTime { get; } = DateTime.Now;
+        public DateTime StartDateTime { get; set; } = DateTime.Now;
 
-        public TaskClass(string name, string description)
+        public TaskClass(string name, string description, string category)
         {
             Name = name;
             if (description.Length >= 200)
@@ -24,6 +25,7 @@ namespace ProgrammTODO
                 Console.WriteLine("Описание задачи не может превышать 200 символов!");
             }
             Description = description;
+            Category = category;
         }
     }
 }

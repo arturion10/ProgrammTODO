@@ -21,14 +21,16 @@ namespace ProgrammTODO
                 Console.WriteLine("Вы ввели слишком длинный текс для описания, сократите до 200 символов: ");
                 description = Console.ReadLine();
             }
-            SaveNewTask(name, description);
+            Console.WriteLine("Напишите категорию: ");
+            var category = Console.ReadLine();
+            SaveNewTask(name, description, category);
         }
 
-        private void SaveNewTask(string name, string description)
+        private void SaveNewTask(string name, string description, string category)
         {            
             using(ApplicationContext db = new ApplicationContext())
             {
-                var task = new TaskClass(name, description);
+                var task = new TaskClass(name, description, category);
                 db.Tasks.Add(task);
                 db.SaveChanges();
                 Console.WriteLine("Вы добавили новую задачу");
@@ -40,7 +42,7 @@ namespace ProgrammTODO
             using (ApplicationContext db = new ApplicationContext())
             {
                 var tasks = db.Tasks.ToList();
-                Console.WriteLine("Список объектов:");
+                Console.WriteLine("Список задач:");
                 foreach (TaskClass t in tasks)
                 {
                     Console.WriteLine($"{t.Id} | {t.Name} | {t.IsCompleted} | {t.StartDateTime} | {t.Description}");
