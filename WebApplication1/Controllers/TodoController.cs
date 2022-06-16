@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using ProgrammTODO;
+using ProgrammTODO.Bll.Services;
 using WebUI.Models;
+using Task = ProgrammTODO.Bll.Models.Task;
 
 namespace WebUI.Controllers
 {
@@ -8,69 +9,53 @@ namespace WebUI.Controllers
     [Route("[controller]")]
     public class TodoController : ControllerBase
     {
-        private readonly TaskDbLogic _logic;
-        public TodoController()
+        private readonly TaskService _service;
+        public TodoController(TaskService service)
         {
-            _logic = new TaskDbLogic();
+            _service = service;
         }
 
-        [HttpPost]
+        [HttpPost("CreateTask")]
         public ActionResult CreateTask(TaskCreationModel model)
         {
-            using(ApplicationContext db = new ApplicationContext())
-            {
-                var task = new TaskClass(model.Name, model.Description, model.Category);
-                db.Tasks.Add(task);
-                db.SaveChanges();
-            }
+            _service.Create(new Task(model.Name, model.Description, model.Category, model.DeadLine—ompleting));
             return Ok();
         }
 
-        [HttpGet]
-        public ActionResult<IEnumerable<TaskClass>> GetAllTask()
+        [HttpGet("AllTask")]
+        public ActionResult<IEnumerable<Task>> GetAllTask()
         {
-            using (ApplicationContext db = new ApplicationContext())
-            {
-                var tasks = db.Tasks.ToList();
-                return tasks;
-            }
+            return _service.GetAll().ToList();
         }
+
         [HttpGet("ActiveTask")]
-        public ActionResult<IEnumerable<TaskClass>> GetActiveTask()
+        public ActionResult<IEnumerable<Task>> GetActiveTasks()
         {
-            using (ApplicationContext db = new ApplicationContext())
-            {
-                var tasks = db.Tasks.ToList().Where(t => t.IsCompleted == false).ToList();
-                return tasks;
-            }
+            return _service.GetActive().ToList();
         }
+
         [HttpPost("ChangeStatus")]
         public void ChangeTaskStatus(int id)
         {
-            using (ApplicationContext db = new ApplicationContext())
-            {
-                var tasks = db.Tasks.FirstOrDefault(p => p.Id == id);
-                if (tasks != null)
-                {
-                    if(tasks.IsCompleted == false)
-                        tasks.IsCompleted = true;
-                    else
-                        tasks.IsCompleted = false;
-                    
-                    db.SaveChanges();
-                }
-            }
+            _service.ChangeStaus(id);
         }
+
         [HttpGet("TaskInTime")]
-        public ActionResult<IEnumerable<TaskClass>> LookTasksInTime(int year, int month, int day)
+        public ActionResult<IEnumerable<Task>> LookTasksInTime(int year, int month, int day)
         {
-            using (ApplicationContext db = new ApplicationContext())
-            {
-                var tasks = db.Tasks.ToList().Where(p => p.StartDateTime.Year == year &&
-                                                         p.StartDateTime.Month == month &&
-                                                         p.StartDateTime.Day == day);
-                return tasks.ToList();
-            }
+            return _service.LookInTime(year, month, day).ToList();
+        }
+
+        [HttpGet("DeadLineInTime")]
+        public ActionResult<IEnumerable<Task>> LookDeadLineInTime(int day, int month, int year)
+        {
+            return _service.LookDeadLine(day, month, year).ToList();
+        }
+
+        [HttpPost("Delite")]
+        public void DeliteTask(int id)
+        {
+            _service.Delite(id);
         }
     }
 }
