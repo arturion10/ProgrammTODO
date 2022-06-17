@@ -1,4 +1,5 @@
-﻿using ProgrammTODO.Dal;
+﻿using Mapster;
+using ProgrammTODO.Dal;
 using ProgrammTODO.Dal.Models;
 using Task = ProgrammTODO.Bll.Models.Task;
 namespace ProgrammTODO.Bll.Services;
@@ -16,34 +17,14 @@ public class TaskService
 	public IEnumerable<Task> GetActive()
 	{
         var tasks = _context.Tasks.Where(t => t.IsCompleted == false);
-		var result = tasks
-			.Select(x => new Task
-			{
-				Category = x.Category,
-				Description = x.Description,
-				Id = x.Id,
-				IsCompleted = x.IsCompleted,
-				Name = x.Name,
-				StartDateTime = x.StartDateTime,
-				DeadLineСompleting = x.DeadLineСompleting
-			});
+		var result = tasks.ProjectToType<Task>();
 
 		return result;
 	}
 	public IEnumerable<Task> GetAll()
     {
 		var tasks = _context.Tasks;
-		var result = tasks
-			.Select(x => new Task
-			{
-				Category = x.Category,
-				Description = x.Description,
-				Id = x.Id,
-				IsCompleted = x.IsCompleted,
-				Name = x.Name,
-				StartDateTime = x.StartDateTime,
-				DeadLineСompleting = x.DeadLineСompleting
-			});
+		var result = tasks.ProjectToType<Task>();
 
 		return result;
 	}
@@ -52,20 +33,9 @@ public class TaskService
 		var tasks = _context.Tasks
 			.Where(t => t.StartDateTime.Year == year &&
 						t.StartDateTime.Month == month &&
-						t.StartDateTime.Day == day)
-			.ToList();
+						t.StartDateTime.Day == day);
 
-		var result = tasks
-			.Select(x => new Task
-			{
-				Category = x.Category,
-				Description = x.Description,
-				Id = x.Id,
-				IsCompleted = x.IsCompleted,
-				Name = x.Name,
-				StartDateTime = x.StartDateTime,
-				DeadLineСompleting = x.DeadLineСompleting
-			});
+		var result = tasks.ProjectToType<Task>();
 
 		return result;
 	}
@@ -74,20 +44,9 @@ public class TaskService
 		var tasks = _context.Tasks
 			.Where(t => t.DeadLineСompleting.Year == year &&
 						t.DeadLineСompleting.Month == month &&
-						t.DeadLineСompleting.Day == day)
-			.ToList();
+						t.DeadLineСompleting.Day == day);
 
-		var result = tasks
-			.Select(x => new Task
-			{
-				Category = x.Category,
-				Description = x.Description,
-				Id = x.Id,
-				IsCompleted = x.IsCompleted,
-				Name = x.Name,
-				StartDateTime = x.StartDateTime,
-				DeadLineСompleting = x.DeadLineСompleting
-			});
+		var result = tasks.ProjectToType<Task>();
 
 		return result;
 	}
