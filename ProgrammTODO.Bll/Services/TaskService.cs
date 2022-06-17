@@ -82,14 +82,17 @@ public class TaskService
     public void EditTask(int id, Task model)
     {
 		var tasks = _context.Tasks.FirstOrDefault(p => p.Id == id);
+
 		if(tasks != null)
         {
-			tasks.Name = model.Name;
-			tasks.Description = model.Description;
-			tasks.Category = model.Category;
-			tasks.DeadLineСompleting = model.DeadLineСompleting;
+            //tasks.Adapt(model);
 
-			_context.SaveChanges();
+            tasks.Name = model.Name;
+            tasks.Description = model.Description;
+            tasks.Category = model.Category;
+            tasks.DeadLineСompleting = model.DeadLineСompleting;
+
+            _context.SaveChanges();
 		}
 	}
 }
