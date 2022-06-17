@@ -57,5 +57,11 @@ namespace WebUI.Controllers
         {
             _service.Delite(id);
         }
+
+        [HttpPost("EditTask")]
+        public void EditTask(int id, TaskCreationModel model)
+        {
+            _service.EditTask(id, new Task(model.Name, model.Description, model.Category, model.DeadLine—ompleting));
+        }
     }
 }

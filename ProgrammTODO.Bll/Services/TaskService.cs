@@ -52,16 +52,7 @@ public class TaskService
 	}
 	public void Create(Task model)
 	{
-		_context.Tasks.Add(new TaskDto()
-		{
-			Category = model.Category,
-			Description = model.Description,
-			Id = model.Id,
-			IsCompleted = model.IsCompleted,
-			Name = model.Name,
-			StartDateTime = model.StartDateTime,
-			DeadLineСompleting = model.DeadLineСompleting
-	});
+		_context.Tasks.Add(model.Adapt<TaskDto>());
 		_context.SaveChanges();
 	}
     public void ChangeStaus(int id)
@@ -86,4 +77,19 @@ public class TaskService
 			_context.SaveChanges();
 		}
 	}
- }
+	//Здесь не работает мапстер
+	//Как я понял он не работает, потому что он сначала удаляет объект а потом там же создает новый
+    public void EditTask(int id, Task model)
+    {
+		var tasks = _context.Tasks.FirstOrDefault(p => p.Id == id);
+		if(tasks != null)
+        {
+			tasks.Name = model.Name;
+			tasks.Description = model.Description;
+			tasks.Category = model.Category;
+			tasks.DeadLineСompleting = model.DeadLineСompleting;
+
+			_context.SaveChanges();
+		}
+	}
+}
