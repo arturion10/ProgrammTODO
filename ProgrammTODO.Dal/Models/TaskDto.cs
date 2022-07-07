@@ -9,4 +9,6 @@ public class TaskDto
 	public bool IsCompleted { get; set; }
 	public DateTime StartDateTime { get; set; }
 	public DateTime DeadLineСompleting { get; set; }
+	public bool IsDeleted { get; set; }
+	public int? GroupTaskDtoId { get; set; }
 }

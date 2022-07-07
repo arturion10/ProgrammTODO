@@ -63,5 +63,18 @@ namespace WebUI.Controllers
         {
             _service.EditTask(id, new Task(model.Name, model.Description, model.Category, model.DeadLine—ompleting));
         }
+
+        [HttpPost("SoftDelete")]
+        public void SoftTaskDelete(int id)
+        {
+            _service.SoftDelete(id);
+        }
+
+        [HttpPost("SoftRecovery")]
+        public void SoftTaskRecovery(int id)
+        {
+            _service.SoftRecovery(id);
+        }
+
     }
 }
